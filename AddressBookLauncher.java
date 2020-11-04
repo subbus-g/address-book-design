@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -75,6 +76,7 @@ class AddressBook
     void display() 
     {
 
+        boolean flag = false;
         if (emptyContacts.size() != 0) 
         {
             System.out.println("the empty contacts are:");
@@ -82,20 +84,46 @@ class AddressBook
             {
                 System.out.println(contact);
             }
+            flag=true;
 
-        } else if (nonEmptyContacts.size() != 0) 
+        }
+        if (nonEmptyContacts.size() != 0) 
         {
             System.out.println("the non empty contacts are:");
             for (String contact : nonEmptyContacts) 
             {
                 System.out.println(contact);
             }
+            flag=true;
         } 
-        else 
+        if(!flag)
         {
             System.out.println("no contacts are created yet");
         }
 
+    }
+    void viewContactInfo()throws Exception
+    {
+        System.out.print("enter name of the contact to view:");
+        String contactName = scanner.nextLine();
+        if(emptyContacts.contains(contactName))
+        {
+            System.out.println("pleast fill the contact "+ contactName+ " before viewing it");
+            return;
+        }
+        else if(!nonEmptyContacts.contains(contactName))
+        {
+            System.out.println("please create the contact "+contactName+" before viewing it");
+            return;
+        }
+        System.out.println("the content of "+ contactName + " is:");
+        FileReader fileReader = new FileReader(contactName);
+        int character;
+        while ((character = fileReader.read()) != -1) 
+        {
+            System.out.print((char) character);
+        }
+        fileReader.close();
     }
 }
 
@@ -113,7 +141,8 @@ public class AddressBookLauncher
             System.out.println("1.create a new contact");
             System.out.println("2.fill contact details");
             System.out.println("3.display all contacts");
-            System.out.println("4.exit");
+            System.out.println("4.view contact information");
+            System.out.println("5.exit");
             System.out.print("enter option:");
             int option = scanner.nextInt();
             switch (option) 
@@ -128,6 +157,9 @@ public class AddressBookLauncher
                     addressBook.display();
                     break;
                 case 4:
+                    addressBook.viewContactInfo();
+                    break;
+                case 5:
                     System.out.println("exiting....");
                     System.exit(0);
                 default:
