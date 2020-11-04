@@ -9,6 +9,7 @@ class AddressBook
     // class variable
     static final Scanner scanner = new Scanner(System.in);
     static Set<String> emptyContacts = new HashSet<>();
+    static Set<String> nonEmptyContacts = new HashSet<>();
 
     // instance method
     void createNewContact() throws Exception 
@@ -27,9 +28,8 @@ class AddressBook
                 System.out.println("new contact " + file.getName() + " is created successfully");
                 emptyContacts.add(file.getName());
             } 
-            else
-            { 
-            
+            else 
+            {
                 System.out.println("file creation failed!");
             }
         }
@@ -40,7 +40,7 @@ class AddressBook
     {
         System.out.print("enter empty contact name which is going to be filed:");
         String contactName = scanner.nextLine();
-        if (emptyContacts.contains(contactName))
+        if (emptyContacts.contains(contactName)) 
         {
 
             FileWriter fw = new FileWriter(contactName);
@@ -60,12 +60,40 @@ class AddressBook
             System.out.print("enter phone number:");
             details += scanner.nextLine() + "\n";
             fw.write(details);
+            emptyContacts.remove(contactName);
+            nonEmptyContacts.add(contactName);
             fw.close();
         }
         else 
         {
             System.out.println(contactName + " is not empty contact or it is not created");
             System.out.println("use other option 1 to create new contact");
+        }
+
+    }
+
+    void display() 
+    {
+
+        if (emptyContacts.size() != 0) 
+        {
+            System.out.println("the empty contacts are:");
+            for (String contact : emptyContacts) 
+            {
+                System.out.println(contact);
+            }
+
+        } else if (nonEmptyContacts.size() != 0) 
+        {
+            System.out.println("the non empty contacts are:");
+            for (String contact : nonEmptyContacts) 
+            {
+                System.out.println(contact);
+            }
+        } 
+        else 
+        {
+            System.out.println("no contacts are created yet");
         }
 
     }
@@ -84,7 +112,8 @@ public class AddressBookLauncher
             System.out.println("-----------------------------");
             System.out.println("1.create a new contact");
             System.out.println("2.fill contact details");
-            System.out.println("3.exit");
+            System.out.println("3.display all contacts");
+            System.out.println("4.exit");
             System.out.print("enter option:");
             int option = scanner.nextInt();
             switch (option) 
@@ -96,6 +125,9 @@ public class AddressBookLauncher
                     addressBook.fillContactDetails();
                     break;
                 case 3:
+                    addressBook.display();
+                    break;
+                case 4:
                     System.out.println("exiting....");
                     System.exit(0);
                 default:
