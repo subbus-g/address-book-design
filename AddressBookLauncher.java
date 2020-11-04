@@ -3,11 +3,11 @@ import java.util.Scanner;
 
 class AddressBook 
 {
+    // class variable
+    static final Scanner scanner = new Scanner(System.in);
 
-    @SuppressWarnings("resource")
-    void createNewContact() throws Exception 
-    {
-        Scanner scanner = new Scanner(System.in);
+    // instance method
+    void createNewContact() throws Exception {
         System.out.print("Enter name of the contact:");
         String contactName = scanner.nextLine();
         File file = new File(contactName);
@@ -30,15 +30,13 @@ class AddressBook
     }
 }
 
-@SuppressWarnings("resource")
-public class AddressBookLauncher 
-{
+public class AddressBookLauncher {
+    // class variable
+    static final Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) throws Exception 
     {
         AddressBook addressBook = new AddressBook();
-
-        Scanner scanner = new Scanner(System.in);
-
         while (true) 
         {
             System.out.println("-----------------------------");
@@ -46,17 +44,14 @@ public class AddressBookLauncher
             System.out.println("2.exit");
             System.out.print("enter option:");
             int option = scanner.nextInt();
-
             switch (option) 
             {
                 case 1:
                     addressBook.createNewContact();
                     break;
-
                 case 2:
                     System.out.println("exiting....");
                     System.exit(0);
-
                 default:
                     System.out.println("please enter the correct choice");
                     break;
