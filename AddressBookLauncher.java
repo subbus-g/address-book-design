@@ -1,13 +1,14 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-
-class AddressBook 
+class AddressBook
 {
     // class variable
     static final Scanner scanner = new Scanner(System.in);
@@ -44,7 +45,6 @@ class AddressBook
         fw.write(content);
         fw.close();
         nonEmptyContacts.add(fileName);
-        System.out.println("the given contents are successfully added in " + fileName);
     }
     void fillContactDetails()throws Exception
     {
@@ -69,6 +69,7 @@ class AddressBook
             details += scanner.nextLine() + "\n";
             writeFile(contactName, details);
             emptyContacts.remove(contactName);
+            System.out.println("the given contents are successfully added in " + contactName);
         }
         else 
         {
@@ -147,40 +148,99 @@ class AddressBook
             return;
         }
         System.out.println("The content of " + contactName + " at present is:");
-        readFile(contactName);
-        System.out.println("Enter the 7 lines of  new content to write:");
-        String newContent="";
-        for (int i = 1; i <= 7; i++) 
+        ArrayList<String> arrayList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(contactName))) 
         {
-            newContent += scanner.nextLine() + "\n";
+            while (reader.ready()) 
+            {
+                String line = reader.readLine();
+                System.out.println(line);
+                arrayList.add(line);
+            }
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+        System.out.println("select a field to edit");
+        System.out.println("f for first name");
+        System.out.println("l for last name");
+        System.out.println("a for Address");
+        System.out.println("c for city");
+        System.out.println("s for state");
+        System.out.println("z for zip");
+        System.out.println("p for phonenumber");
+        System.out.print("enter field to edit:");
+        String choice = scanner.nextLine().trim().toLowerCase();
+        int field = 0;
+        switch (choice) 
+        {
+            case "f":
+                field = 0;
+                break;
+            case "l":
+                field = 1;
+                break;
+            case "a":
+                field = 2;
+                break;
+            case "c":
+                field = 3;
+                break;
+            case "s":
+                field = 4;
+                break;
+            case "z":
+                field = 4;
+                break;
+            case "p":
+                field = 6;
+                break;
+            default:
+                System.out.println("please enter field correctly");
+                break;
+        }
+        System.out.print("enter new data of the field:");
+        String newData = scanner.nextLine();
+        String newContent = "";
+        for (int i = 0; i < arrayList.size(); i++) 
+        {
+            if (i == field) 
+            {
+                arrayList.add(i, newData);
+            }
+            newContent += arrayList.get(i) + "\n";
         }
         String option;
         do 
         {
             System.out.println("enter... S for SAVE     SA for SAVE AS      C for CANCEL");
             option = scanner.nextLine().trim().toLowerCase();
-        } while (!(option.equals("s")  || option.equals("sa")) || option.equals("c"));
-        switch(option)
+
+        } while (!(option.equals("s") || option.equals("sa")) || option.equals("c"));
+
+        switch (option) 
         {
-            //the new contents are saved as givenfilename
+            // the field is updated in the same file
             case "s":
                 writeFile(contactName, newContent);
-                System.out.println(contactName + " is saved with new content");
+                System.out.println(contactName + " is edited successfully");
                 break;
-            //the new contents are saved as givenfilenamewithoutextension.csv
+            // the field is updated in givenfilenamewithoutextension.csv file
             case "sa":
                 String extension = ".csv";
                 String newContactName = contactName.replaceFirst("[.][^.]+$", "") + extension;
                 writeFile(newContactName, newContent);
                 nonEmptyContacts.add(newContactName);
+                System.out.println("changes are saved successfully in " + newContactName + " file");
                 break;
             case "c":
                 System.out.println("changes are not saved");
                 return;
             default:
-                System.out.println("please select either S or C");
+                System.out.println("please select either S or SA or C");
+                break;
         }
-        
     }
     void deleteContact()
     {
