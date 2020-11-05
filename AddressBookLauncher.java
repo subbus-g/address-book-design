@@ -10,12 +10,17 @@ import java.util.Set;
 
 class AddressBook
 {
-    // class variable
+    // class variables
+
+    //scanner variable is declared as static to use throughout the program
     static final Scanner scanner = new Scanner(System.in);
+    //contains set of contacts which are empty(contact created and no details added)
     static Set<String> emptyContacts = new HashSet<>();
+    //contains set of contacts which are non empty(contact created and details added)
     static Set<String> nonEmptyContacts = new HashSet<>();
 
-    // instance method
+    // instance methods
+    //creates empty contact
     void createNewContact() throws Exception 
     {
         System.out.print("Enter name of the contact:");
@@ -39,6 +44,7 @@ class AddressBook
         }
 
     }
+    //writes given content into given file
     void writeFile(String fileName,String content)throws Exception
     {
         FileWriter fw = new FileWriter(fileName);
@@ -46,6 +52,7 @@ class AddressBook
         fw.close();
         nonEmptyContacts.add(fileName);
     }
+    //given fields are added into contact
     void fillContactDetails()throws Exception
     {
         System.out.print("enter empty contact name which is going to be filed:");
@@ -69,16 +76,16 @@ class AddressBook
             details += scanner.nextLine() + "\n";
             writeFile(contactName, details);
             emptyContacts.remove(contactName);
-            System.out.println("the given contents are successfully added in " + contactName);
+            System.out.println("the given fields are successfully added in " + contactName);
         }
         else 
         {
             System.out.println(contactName + " is not empty contact or it is not created");
-            System.out.println("use other option 1 to create new contact or option 5 to edit already created one");
+            System.out.println("use other option c to create new contact or option e to edit already created one");
         }
 
     }
-
+    //displays list of empty contacts and non empty contacts
     void displayAllContacts() 
     {
         boolean flag = false;
@@ -106,6 +113,7 @@ class AddressBook
         }
 
     }
+    //prints the given file content
     void readFile(String fileName)throws Exception
     {
         FileReader fileReader = new FileReader(fileName);
@@ -116,6 +124,7 @@ class AddressBook
         }
         fileReader.close();
     }
+    //displays all fields in the given contact
     void viewContactInfo()throws Exception
     {
         System.out.print("enter name of the contact to view:");
@@ -137,18 +146,24 @@ class AddressBook
     {
         System.out.print("enter name of the contact to edit:");
         String contactName = scanner.nextLine();
+        //if given file is empty
         if(emptyContacts.contains(contactName))
         {
+            System.out.println(contactName + " is empty!");
             System.out.println("pleast fill the contact "+ contactName + " before editing it");
             return;
         }
+        //if given file is non empty
         else if(!nonEmptyContacts.contains(contactName))
         {
+            System.out.println(contactName + " does not exits!");
             System.out.println("please create the contact "+ contactName +" before editing it");
             return;
         }
         System.out.println("The content of " + contactName + " at present is:");
+        //array to store lines in a file
         ArrayList<String> arrayList = new ArrayList<>();
+        //each line is printed and added to the array list
         try (BufferedReader reader = new BufferedReader(new FileReader(contactName))) 
         {
             while (reader.ready()) 
@@ -284,38 +299,38 @@ public class AddressBookLauncher
         AddressBook addressBook = new AddressBook();
         while (true) 
         {
-            System.out.println("-----------------------------");
-            System.out.println("1.create a new contact");
-            System.out.println("2.fill contact details");
-            System.out.println("3.display all contacts");
-            System.out.println("4.view contact information");
-            System.out.println("5.edit contact information");
-            System.out.println("6.delete contact information");
-            System.out.println("7.exit");
+            System.out.println("--------------ENTER-------------");
+            System.out.println("c for creating a new contact");
+            System.out.println("f for filling contact details");
+            System.out.println("p for printing all contacts");
+            System.out.println("v for viewing  contact information");
+            System.out.println("e for editing contact information");
+            System.out.println("d for deleting contact information");
+            System.out.println("q for quitting");
             System.out.print("enter option:");
-            String option = scanner.nextLine().trim();
+            String option = scanner.nextLine().trim().toLowerCase();
             switch (option) 
             {
-                case "1":
+                case "c":
                     addressBook.createNewContact();
                     break;
-                case "2":
+                case "f":
                     addressBook.fillContactDetails();
                     break;
-                case "3":
+                case "p":
                     addressBook.displayAllContacts();
                     break;
-                case "4":
+                case "v":
                     addressBook.viewContactInfo();
                     break;
-                case "5":
+                case "e":
                     addressBook.editContactInfo();
                     break;
-                case "6":
+                case "d":
                     addressBook.deleteContact();
                     break;
-                case "7":
-                    System.out.println("exiting....");
+                case "q":
+                    System.out.println("quiting....!");
                     System.exit(0);
                 default:
                     System.out.println("please enter the correct choice");
