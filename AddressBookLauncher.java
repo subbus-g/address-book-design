@@ -70,7 +70,7 @@ class AddressBook
         else 
         {
             System.out.println(contactName + " is not empty contact or it is not created");
-            System.out.println("use other option 1 to create new contact");
+            System.out.println("use other option 1 to create new contact or option 5 to edit already created one");
         }
 
     }
@@ -148,21 +148,29 @@ class AddressBook
         readFile(contactName);
         System.out.println("Enter the 7 lines of  new content to write:");
         String newContent="";
-        for(int i=1;i<=7;i++)
+        for (int i = 1; i <= 7; i++) 
         {
             newContent += scanner.nextLine() + "\n";
         }
-        System.out.println("enter 1 for SAVE \t 2 for CANCEL");
-        int option = scanner.nextInt();
+        String option;
+        do 
+        {
+            System.out.println("enter... S for SAVE        C for CANCEL");
+            option = scanner.nextLine();
+        } while (!(option.equalsIgnoreCase("s")  || option.equalsIgnoreCase("c")));
         switch(option)
         {
-            case 1:
+            case "s":
+            case "S":
                 writeFile(contactName, newContent);
                 System.out.println(contactName + " is saved with new content");
                 break;
-            case 2:
-                System.out.println("editing is cancelled");
+            case "c":
+            case "C":
+                System.out.println("changes are not saved");
                 return;
+            default:
+                System.out.println("please select either S or C");
         }
         
     }
@@ -186,7 +194,7 @@ public class AddressBookLauncher
             System.out.println("5.edit contact information");
             System.out.println("6.exit");
             System.out.print("enter option:");
-            String option = scanner.nextLine();
+            String option = scanner.nextLine().trim();
             switch (option) 
             {
                 case "1":
