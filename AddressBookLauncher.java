@@ -41,6 +41,7 @@ class AddressBook
         FileWriter fw = new FileWriter(fileName);
         fw.write(content);
         fw.close();
+        nonEmptyContacts.add(fileName);
         System.out.println("the given contents are successfully added in " + fileName);
     }
     void fillContactDetails()throws Exception
@@ -66,7 +67,6 @@ class AddressBook
             details += scanner.nextLine() + "\n";
             writeFile(contactName, details);
             emptyContacts.remove(contactName);
-            nonEmptyContacts.add(contactName);
         }
         else 
         {
@@ -170,6 +170,7 @@ class AddressBook
                 String extension = ".csv";
                 String newContactName = contactName.replaceFirst("[.][^.]+$", "") + extension;
                 writeFile(newContactName, newContent);
+                nonEmptyContacts.add(newContactName);
                 break;
             case "c":
                 System.out.println("changes are not saved");
